@@ -1,0 +1,28 @@
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(17, 16, 24, 0.05);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+  cursor: pointer;
+}
+
+.todo-item input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  accent-color: #7c3aed;
+}
+
+.todo-text {
+  font-size: 1rem;
+  color: #1b1730;
+}
+
+.todo-text[data-completed='true'] {
+  text-decoration: line-through;
+  color: rgba(27, 23, 48, 0.5);
+}
+
