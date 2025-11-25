@@ -19,7 +19,8 @@ export default defineConfig({
       filename: 'remoteEntry.js',
       exposes: {
         './TextInput': './src/components/TextInput',
-        './TodoItem': './src/components/TodoItem'
+        './TodoItem': './src/components/TodoItem',
+        './Typography': './src/components/Typography'
       },
       shared: {
         react: {

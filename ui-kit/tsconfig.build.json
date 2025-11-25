@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "../types/ui-kit",
+    "rootDir": "src",
+    "stripInternal": true,
+    "composite": false
+  },
+  "include": [
+    "src/components/TextInput/index.ts",
+    "src/components/TodoItem/index.ts",
+    "src/components/Typography/index.ts"
+  ]
+}
+
