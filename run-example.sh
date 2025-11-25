@@ -25,9 +25,18 @@ cleanup() {
 }
 trap cleanup EXIT
 
+free_port() {
+  local port=$1
+  if lsof -ti tcp:"$port" >/dev/null 2>&1; then
+    echo "→ Освобождаю порт $port"
+    lsof -ti tcp:"$port" | xargs kill -9 >/dev/null 2>&1 || true
+  fi
+}
+
 echo "→ Собираю ui-kit (build + types)"
 (cd "$ROOT_DIR/ui-kit" && npm run build >"$UIKIT_LOG" 2>&1)
 
+free_port 4174
 echo "→ Запускаю ui-kit preview на 4174"
 (cd "$ROOT_DIR/ui-kit" && npm run preview -- --host 0.0.0.0 --port 4174 >>"$UIKIT_LOG" 2>&1) &
 UIKIT_PID=$!
@@ -35,6 +44,7 @@ UIKIT_PID=$!
 echo "→ Собираю todo-remote (ожидает types из ui-kit)"
 (cd "$ROOT_DIR/todo-remote" && npm run build >"$TODO_LOG" 2>&1)
 
+free_port 4175
 echo "→ Запускаю todo-remote preview на 4175"
 (cd "$ROOT_DIR/todo-remote" && npm run preview -- --host 0.0.0.0 --port 4175 >>"$TODO_LOG" 2>&1) &
 TODO_PID=$!
