@@ -13,6 +13,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "paths": {
+      "ui-kit/*": ["../types/ui-kit/*"]
+    },
 
     /* Linting */
     "strict": true,
@@ -20,6 +23,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "../types/module-federation.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

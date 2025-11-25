@@ -1,6 +1,10 @@
-import { Component, type ErrorInfo, type ReactNode } from 'react'
+import { Component, type ErrorInfo, type ReactNode, Suspense, lazy, type ComponentType } from 'react'
+import type { ButtonProps } from 'ui-kit/Button'
 
 import './RemoteErrorBoundary.css'
+
+// @ts-expect-error Remote module provided via Module Federation
+const RemoteButton = lazy<ComponentType<ButtonProps>>(() => import('ui_kit/Button'))
 
 type Props = {
   children: ReactNode
@@ -15,6 +19,10 @@ type State = {
 export class RemoteErrorBoundary extends Component<Props, State> {
   state: State = {
     hasError: false
+  }
+
+  private handleRetry = () => {
+    this.setState({ hasError: false, error: undefined })
   }
 
   static getDerivedStateFromError(error: Error): State {
@@ -36,9 +44,17 @@ export class RemoteErrorBoundary extends Component<Props, State> {
             <h2>Не удалось загрузить микрофронтенд</h2>
             <p>Проверьте, что remote-приложение запущено и доступно по указанному URL.</p>
             {error?.message && <pre>{error.message}</pre>}
-            <button type="button" onClick={() => this.setState({ hasError: false, error: undefined })}>
-              Попробовать ещё раз
-            </button>
+            <Suspense
+              fallback={
+                <button type="button" className="remote-error__fallback-button" onClick={this.handleRetry}>
+                  Попробовать ещё раз
+                </button>
+              }
+            >
+              <RemoteButton variant="ghost" size="sm" onClick={this.handleRetry}>
+                Попробовать ещё раз
+              </RemoteButton>
+            </Suspense>
           </div>
         )
       )

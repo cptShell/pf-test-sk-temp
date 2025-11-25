@@ -1,33 +1,31 @@
-import { Suspense, lazy, useState, type ComponentType } from 'react'
+import { Suspense, lazy, useCallback, useMemo, useState, type ComponentType } from 'react'
+import type { TextInputProps } from 'ui-kit/TextInput'
+import type { TodoItemProps } from 'ui-kit/TodoItem'
+import type { TypographyProps } from 'ui-kit/Typography'
 
 import { useTodoStore } from './store'
 
 import './App.css'
 
-type RemoteTextInputProps = {
-  value: string
-  placeholder?: string
-  disabled?: boolean
-  onChange?: (value: string) => void
-  onSubmit?: () => void
-}
+const MAX_ITEMS = 20
 
-type RemoteTodoItemProps = {
-  text: string
-  completed?: boolean
-  onToggle?: () => void
-}
+const createRemoteComponent = <Props,>(
+  loader: () => Promise<{ default: ComponentType<Props> }>
+) => lazy(loader)
 
-const TextInput = lazy<ComponentType<RemoteTextInputProps>>(async () => {
-  // @ts-expect-error Module Federation remote, типы подтягиваются в runtime
+const TextInput = createRemoteComponent<TextInputProps>(async () => {
   const module = await import('ui-kit/TextInput')
-  return { default: module.TextInput as ComponentType<RemoteTextInputProps> }
+  return { default: module.default }
 })
 
-const TodoItem = lazy<ComponentType<RemoteTodoItemProps>>(async () => {
-  // @ts-expect-error Module Federation remote, типы подтягиваются в runtime
+const TodoItem = createRemoteComponent<TodoItemProps>(async () => {
   const module = await import('ui-kit/TodoItem')
-  return { default: module.TodoItem as ComponentType<RemoteTodoItemProps> }
+  return { default: module.default }
+})
+
+const Typography = createRemoteComponent<TypographyProps>(async () => {
+  const module = await import('ui-kit/Typography')
+  return { default: module.default }
 })
 
 function TodoApp() {
@@ -36,36 +34,67 @@ function TodoApp() {
   const add = useTodoStore((state) => state.add)
   const toggle = useTodoStore((state) => state.toggle)
 
-  const handleSubmit = () => {
-    const value = text.trim()
-    if (!value) {
-      return
-    }
-    add(value)
+  const isLimitReached = items.length >= MAX_ITEMS
+  const canSubmit = text.trim().length > 0 && !isLimitReached
+
+  const handleSubmit = useCallback(() => {
+    if (!canSubmit) return
+
+    add(text.trim())
     setText('')
-  }
+  }, [add, canSubmit, text])
+
+  const renderedItems = useMemo(
+    () =>
+      items.map((item) => (
+        <TodoItem
+          key={item.id}
+          text={item.text}
+          completed={item.completed}
+          onToggle={() => toggle(item.id)}
+        />
+      )),
+    [items, toggle]
+  )
 
   return (
     <div className="todo-app">
       <header>
-        <p>Remote: todo-remote</p>
-        <h1>Todo список как микрофронт</h1>
+        <Suspense fallback={<div className="mf-loader">Подключаем Typography…</div>}>
+          <Typography variant="eyebrow" color="inverse" transform="uppercase">
+            Remote: todo-remote
+          </Typography>
+          <Typography variant="display" color="inverse">
+            Todo список как микрофронт
+          </Typography>
+        </Suspense>
       </header>
 
       <section className="composer">
         <Suspense fallback={<div className="mf-loader">Подключаем ui-kit…</div>}>
-          <TextInput value={text} placeholder="Добавить задачу..." onChange={setText} onSubmit={handleSubmit} />
+          <TextInput
+            value={text}
+            placeholder="Добавить задачу..."
+            onChange={setText}
+            onSubmit={handleSubmit}
+            disabled={isLimitReached}
+          />
         </Suspense>
-        <button type="button" onClick={handleSubmit}>
+        <button type="button" onClick={handleSubmit} disabled={!canSubmit}>
           Добавить
         </button>
+        {isLimitReached && (
+          <Suspense fallback={<div className="mf-loader">Подключаем Typography…</div>}>
+            <Typography variant="caption" color="danger" className="limit-warning">
+              Лимит 20 задач — удалите выполненные, чтобы добавить новые.
+            </Typography>
+          </Suspense>
+        )}
       </section>
 
       <section className="todo-list">
         <Suspense fallback={<div className="mf-loader">Загружаем карточки…</div>}>
-          {items.map((item) => (
-            <TodoItem key={item.id} text={item.text} completed={item.completed} onToggle={() => toggle(item.id)} />
-          ))}
+          {renderedItems}
         </Suspense>
       </section>
     </div>

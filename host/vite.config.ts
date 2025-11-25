@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import federation from '@originjs/vite-plugin-federation'
 
@@ -12,11 +12,17 @@ type SharedConfig = Record<
 >
 
 export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
   const todoRemoteUrl =
-    process.env.VITE_TODO_REMOTE_URL ||
+    env.VITE_TODO_REMOTE_URL ||
     (mode === 'production'
       ? 'http://localhost:4175/assets/remoteEntry.js'
       : 'http://localhost:4175/assets/remoteEntry.js')
+  const uiKitRemoteUrl =
+    env.VITE_UI_KIT_URL ||
+    (mode === 'production'
+      ? 'http://localhost:4174/assets/remoteEntry.js'
+      : 'http://localhost:4174/assets/remoteEntry.js')
 
   const sharedDeps: SharedConfig = {
     react: {
@@ -42,7 +48,8 @@ export default defineConfig(({ mode }) => {
       federation({
         name: 'todo_host',
         remotes: {
-          'todo_remote': todoRemoteUrl
+          'todo_remote': todoRemoteUrl,
+          'ui_kit': uiKitRemoteUrl
         },
         shared: sharedDeps
       })

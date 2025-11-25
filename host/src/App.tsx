@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react'
 import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom'
 
+import RemoteErrorBoundary from './components/RemoteErrorBoundary'
 import './App.css'
 
 // @ts-expect-error Module Federation remote available at runtime
@@ -18,9 +19,11 @@ const Landing = () => (
 )
 
 const TodoRoute = () => (
-  <Suspense fallback={<div className="mf-loader">Загружаем todo-remote…</div>}>
-    <TodoRemote />
-  </Suspense>
+  <RemoteErrorBoundary>
+    <Suspense fallback={<div className="mf-loader">Загружаем todo-remote…</div>}>
+      <TodoRemote />
+    </Suspense>
+  </RemoteErrorBoundary>
 )
 
 function App() {
