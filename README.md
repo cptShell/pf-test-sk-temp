@@ -88,7 +88,7 @@ cd ../host && npm install
 ```bash
 cd ui-kit
 npm run build
-npm run preview -- --port 4174
+npm run preview
 ```
 
 Проверь: `http://localhost:4174/assets/remoteEntry.js` должен отдавать JS-файл.
@@ -97,7 +97,7 @@ npm run preview -- --port 4174
 
 ```bash
 cd todo-remote
-npm run dev -- --port 4175
+npm run dev
 ```
 
 **4. Запусти host (shell):**
@@ -148,24 +148,32 @@ shared: {
 
 ```
 .
-├── host/              # Shell-приложение
+├── host/                 # Shell-приложение, React Router
 │   ├── src/
-│   │   └── App.tsx    # Роутинг + lazy-загрузка todo-remote
-│   └── vite.config.ts # Module Federation: remotes
+│   │   ├── App.tsx       # Роутинг, RemoteErrorBoundary
+│   │   └── components/
+│   │       └── RemoteErrorBoundary.tsx
+│   └── vite.config.ts    # Remotes: todo_remote, ui_kit
 │
-├── todo-remote/       # Микрофронт с Todo-логикой
+├── todo-remote/          # Микрофронт с Todo-логикой
 │   ├── src/
-│   │   ├── App.tsx    # TodoApp компонент
-│   │   └── store.ts   # Zustand store
-│   └── vite.config.ts # Module Federation: remotes + exposes
+│   │   ├── App.tsx       # TodoApp, lazy импорт ui-kit
+│   │   └── store.ts      # Zustand store
+│   └── vite.config.ts    # Remotes: ui-kit, expose TodoApp
 │
-└── ui-kit/            # Библиотека компонентов
+└── ui-kit/               # Библиотека компонентов
     ├── src/
     │   └── components/
-    │       ├── TextInput.tsx
-    │       └── TodoItem.tsx
-    └── vite.config.ts # Module Federation: exposes
+    │       ├── TextInput/
+    │       ├── TodoItem/
+    │       ├── Typography/
+    │       └── Button/
+    ├── tsconfig.build.json # Генерация types/ для remotes
+    └── vite.config.ts      # Exposes: TextInput, TodoItem, Typography, Button
+
 ```
+
+````
 
 ## Технологии
 
@@ -192,7 +200,7 @@ shared: {
 
 ```bash
 VITE_TODO_REMOTE_URL=https://todo-remote.example.com/assets/remoteEntry.js
-```
+````
 
 **todo-remote/.env.production:**
 

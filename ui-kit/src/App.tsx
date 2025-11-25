@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import './App.css'
+import Button from './components/Button'
 import TextInput from './components/TextInput'
 import TodoItem from './components/TodoItem'
 
@@ -17,6 +18,15 @@ function App() {
       <div className="preview">
         <h1>UI Kit Playground</h1>
         <TextInput value={value} placeholder="Введите задачу" onChange={setValue} />
+        <div className="preview-actions">
+          <Button onClick={() => console.log('Primary click', value)}>Primary</Button>
+          <Button variant="ghost" onClick={() => console.log('Ghost click', value)}>
+            Ghost
+          </Button>
+          <Button size="sm" onClick={() => setValue('')}>
+            Очистить
+          </Button>
+        </div>
         <div className="preview-list">
           {mockItems.map((item) => (
             <TodoItem key={item.id} text={item.text} completed={item.completed} />
