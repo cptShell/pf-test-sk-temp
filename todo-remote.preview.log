@@ -1,6 +1,0 @@
-
-> todo-remote@0.0.0 preview
-> vite preview --host 0.0.0.0 --port 4175
-
-  ➜  Local:   http://localhost:4175/
-  ➜  Network: http://192.168.100.73:4175/
