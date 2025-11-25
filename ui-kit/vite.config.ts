@@ -18,8 +18,8 @@ export default defineConfig({
       name: 'ui_kit',
       filename: 'remoteEntry.js',
       exposes: {
-        './TextInput': './src/components/TextInput.tsx',
-        './TodoItem': './src/components/TodoItem.tsx'
+        './TextInput': './src/components/TextInput',
+        './TodoItem': './src/components/TodoItem'
       },
       shared: {
         react: {
@@ -37,7 +37,8 @@ export default defineConfig({
   ],
   build: {
     target: 'esnext',
-    minify: false
+    minify: false,
+    cssCodeSplit: false
   },
   server: {
     port: 4174,

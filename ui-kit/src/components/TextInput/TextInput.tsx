@@ -1,6 +1,6 @@
 import { ChangeEvent, forwardRef } from 'react'
 
-import './text-input.css'
+import './TextInput.css'
 
 export type TextInputProps = {
   value: string

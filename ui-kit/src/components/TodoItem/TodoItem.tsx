@@ -1,4 +1,4 @@
-import './todo-item.css'
+import './TodoItem.css'
 
 export type TodoItemProps = {
   text: string
@@ -18,3 +18,4 @@ export const TodoItem = ({ text, completed, onToggle }: TodoItemProps) => {
 }
 
 export default TodoItem
+
