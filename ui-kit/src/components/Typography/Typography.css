@@ -1,0 +1,89 @@
+.ui-typography {
+  margin: 0;
+  color: #0f0c1f;
+}
+
+.ui-typography--eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.ui-typography--display {
+  font-size: clamp(2.75rem, 6vw, 3.75rem);
+  line-height: 1.05;
+  font-weight: 700;
+}
+
+.ui-typography--title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.ui-typography--body {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.ui-typography--caption {
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.ui-typography--color-default {
+  color: #0f0c1f;
+}
+
+.ui-typography--color-muted {
+  color: rgba(15, 12, 31, 0.65);
+}
+
+.ui-typography--color-accent {
+  color: #7c3aed;
+}
+
+.ui-typography--color-success {
+  color: #0ea5e9;
+}
+
+.ui-typography--color-danger {
+  color: #fb7185;
+}
+
+.ui-typography--color-inverse {
+  color: #f8f7ff;
+}
+
+.ui-typography--align-start {
+  text-align: left;
+}
+
+.ui-typography--align-center {
+  text-align: center;
+}
+
+.ui-typography--align-end {
+  text-align: right;
+}
+
+.ui-typography--weight-regular {
+  font-weight: 400;
+}
+
+.ui-typography--weight-medium {
+  font-weight: 500;
+}
+
+.ui-typography--weight-bold {
+  font-weight: 700;
+}
+
+.ui-typography--uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.75rem;
+}
+

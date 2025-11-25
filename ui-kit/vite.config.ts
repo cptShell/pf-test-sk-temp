@@ -20,7 +20,8 @@ export default defineConfig({
       exposes: {
         './TextInput': './src/components/TextInput',
         './TodoItem': './src/components/TodoItem',
-        './Typography': './src/components/Typography'
+        './Typography': './src/components/Typography',
+        './Button': './src/components/Button'
       },
       shared: {
         react: {

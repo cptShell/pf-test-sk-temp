@@ -12,7 +12,8 @@
   "include": [
     "src/components/TextInput/index.ts",
     "src/components/TodoItem/index.ts",
-    "src/components/Typography/index.ts"
+    "src/components/Typography/index.ts",
+    "src/components/Button/index.ts"
   ]
 }
 
